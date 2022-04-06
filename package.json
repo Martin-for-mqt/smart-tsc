@@ -1,0 +1,32 @@
+{
+  "name": "smart-tsc",
+  "version": "0.0.1",
+  "description": "expand tsc command",
+  "main": "index.js",
+  "bin": {
+    "smart-tsc": "./src/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Martin-for-mqt/smart-tsc.git"
+  },
+  "keywords": [
+    "typescript",
+    "typescript-check"
+  ],
+  "author": "Martin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Martin-for-mqt/smart-tsc/issues"
+  },
+  "homepage": "https://github.com/Martin-for-mqt/smart-tsc#readme",
+  "dependencies": {
+    "chalk": "^5.0.1",
+    "minimatch-all": "^1.1.0",
+    "spawn-args": "^0.2.0"
+  }
+}
