@@ -48,8 +48,13 @@ function tscCheck() {
         }
 
         fs.writeFileSync(tmpTsConfigPath, JSON.stringify(tmpTsConfig, null, 2))
+    }
 
-
+    const argsSmartIncludeIndex = restArg.findIndex(arg => arg === '--smart-include');
+    let smartTscIncludePaths = [];
+    if (argsSmartIncludeIndex !== -1) {
+        smartTscIncludePaths = restArg[argsSmartIncludeIndex + 1].split(',').map((path) => isDir(path) ? `${path}/**`: path);
+        restArg.splice(argsSmartIncludeIndex, 2)
     }
 
     const tsc = runSync(['-p', tmpTsConfigPath || tsconfigPath, ...restArg], false);
@@ -59,6 +64,7 @@ function tscCheck() {
     const errors = [];
     lines.forEach((line) => {
         const matches = regexp.exec(line.trim());
+        regexp.lastIndex = 0;
         if (matches) {
             const [output, filepath, line, column, category, type, message] =
                 matches;
@@ -71,8 +77,15 @@ function tscCheck() {
                 type,
                 message,
             };
-            if (!minimatchAll(filepath, errorExcludePaths)) {
-                errors.push(error);
+            
+            if (!smartTscIncludePaths.length) {
+                if (!minimatchAll(filepath, errorExcludePaths)) {
+                    errors.push(error);
+                }
+            } else {
+                if (minimatchAll(filepath, smartTscIncludePaths) && !minimatchAll(filepath, errorExcludePaths)) {
+                    errors.push(error);
+                }
             }
         }
     });
